@@ -57,9 +57,11 @@ namespace KendoSchedulerApi.Controllers
         }
 
         // GET api/Task/5
-        public Task GetTask(int id)
+        public SRViewModel GetTask(int id)
         {
-            Task task = db.Tasks.Single(p => p.TaskID == id);
+            var result = SRBinderHelper.RetrunListOfOrders().ToList();
+            var task = result.Where(p => p.TaskID == id).FirstOrDefault();
+            
             if (task == null)
             {
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
@@ -69,7 +71,7 @@ namespace KendoSchedulerApi.Controllers
         }
 
         // PUT api/Task/5
-        [HttpPut, Route("{id}")]
+        [HttpPut]
         public HttpResponseMessage PutTask(int id, [FromBody] TaskViewModel task)
         {
             if (ModelState.IsValid && id == task.TaskID)
@@ -147,7 +149,6 @@ namespace KendoSchedulerApi.Controllers
         }
 
         // DELETE api/Task/5
-        [HttpDelete, Route("{id}")]
         public HttpResponseMessage DeleteTask(int id)
         {
             Task task = db.Tasks.Single(p => p.TaskID == id);
