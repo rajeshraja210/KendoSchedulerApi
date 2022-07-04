@@ -70,7 +70,7 @@ namespace KendoSchedulerApi.Controllers
 
         // PUT api/Task/5
         [HttpPut, Route("{id}")]
-        public HttpResponseMessage PutTask(int id, TaskViewModel task)
+        public HttpResponseMessage PutTask(int id, [FromBody] TaskViewModel task)
         {
             if (ModelState.IsValid && id == task.TaskID)
             {
@@ -156,7 +156,7 @@ namespace KendoSchedulerApi.Controllers
                 return Request.CreateResponse(HttpStatusCode.NotFound);
             }
 
-            
+
 
             try
             {
