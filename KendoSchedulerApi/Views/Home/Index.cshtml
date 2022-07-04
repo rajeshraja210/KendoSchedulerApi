@@ -154,10 +154,9 @@
                         //    dataType: "jsonp"
                         //},
                         update: {
-                            url: "https://localhost:44399/api/Task/",
+                            url: "https://localhost:44399/api/Task",
                             type: 'PUT',
                             dataType: "json",
-                            contentType: "application/json; charset=utf-8"
                         },
                         create: {
                             url: "https://localhost:44399/api/Task",
@@ -165,7 +164,7 @@
                             dataType: "json"
                         },
                         destroy: {
-                            url: "https://localhost:44399/api/Task/",
+                            url: "https://localhost:44399/api/Task",
                             type: 'DELETE',
                             dataType: "json"
                         },
@@ -180,7 +179,7 @@
                                     return { id: task_id };
                                 }
                                 else
-                                    return { task: kendo.stringify(options.models)};
+                                    return { task: kendo.stringify(options.models[options.models.length - 1]) };
                             }
                         }
                     },
