@@ -1,7 +1,7 @@
 ﻿using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
+using KendoSchedulerApi.Helpers;
 using KendoSchedulerApi.Models;
-using KendoWindow_Ajax_Form.Helpers;
 using System;
 using System.Data;
 using System.Data.Entity;
@@ -75,7 +75,7 @@ namespace KendoSchedulerApi.Controllers
         {
             if (ModelState.IsValid && id == task.TaskID)
             {
-                var entity = new Task
+                var entity = new SRViewModel
                 {
                     TaskID = task.TaskID,
                     Title = task.Title,
@@ -91,17 +91,18 @@ namespace KendoSchedulerApi.Controllers
                     OwnerID = task.OwnerID
                 };
 
-                db.Tasks.Attach(entity);
-                db.Entry(entity).State = EntityState.Modified;
+                //db.Tasks.Attach(entity);
+                //db.Entry(entity).State = EntityState.Modified;
 
-                try
-                {
-                    db.SaveChanges();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    return Request.CreateResponse(HttpStatusCode.NotFound);
-                }
+                //try
+                //{
+                //    db.SaveChanges();
+                //}
+                //catch (DbUpdateConcurrencyException)
+                //{
+                //    return Request.CreateResponse(HttpStatusCode.NotFound);
+                //}
+                SRBinderHelper.UpdateOrder(entity);
 
                 return Request.CreateResponse(HttpStatusCode.OK);
             }
@@ -117,7 +118,7 @@ namespace KendoSchedulerApi.Controllers
         {
             if (ModelState.IsValid)
             {
-                var entity = new Task
+                var entity = new SRViewModel
                 {
                     TaskID = task.TaskID,
                     Title = task.Title,
@@ -133,9 +134,9 @@ namespace KendoSchedulerApi.Controllers
                     OwnerID = task.OwnerID
                 };
 
-                db.Tasks.Add(entity);
-                db.SaveChanges();
-
+                //db.Tasks.Add(entity);
+                //db.SaveChanges();
+                SRBinderHelper.AddOrder(entity);
                 HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created, new { Data = new[] { task }, Total = 1 });
                 response.Headers.Location = new Uri(Url.Link("DefaultApi", new { id = task.TaskID }));
                 return response;
@@ -156,11 +157,11 @@ namespace KendoSchedulerApi.Controllers
                 return Request.CreateResponse(HttpStatusCode.NotFound);
             }
 
-            db.Tasks.Remove(task);
+            
 
             try
             {
-                db.SaveChanges();
+                SRBinderHelper.DeleteOrder(id);
             }
             catch (DbUpdateConcurrencyException)
             {

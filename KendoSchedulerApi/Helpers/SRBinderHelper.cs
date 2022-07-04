@@ -1,4 +1,4 @@
-﻿using KendoWindow_Ajax_Form.Models;
+﻿using KendoSchedulerApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Web;
 using System.Xml.Serialization;
 
-namespace KendoWindow_Ajax_Form.Helpers
+namespace KendoSchedulerApi.Helpers
 {
     public class SRBinderHelper
     {

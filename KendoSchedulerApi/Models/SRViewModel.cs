@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Xml.Serialization;
 
-namespace KendoWindow_Ajax_Form.Models
+namespace KendoSchedulerApi.Models
 {
     [Serializable]
     [XmlRoot("SR"), XmlType("SRViewModel")]

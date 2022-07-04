@@ -24,7 +24,7 @@ namespace KendoSchedulerApi.Models
         public System.DateTime End { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public Nullable<int> OwnerID { get; set; }
+        public int OwnerID { get; set; }
         public bool IsAllDay { get; set; }
         public string RecurrenceRule { get; set; }
         public string RecurrenceID { get; set; }
