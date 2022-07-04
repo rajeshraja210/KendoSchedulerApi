@@ -5,12 +5,49 @@ using System.Data;
 using System.Linq;
 using System.Reflection;
 using System.Web;
-using System.Xml.Serialization;
 
 namespace KendoSchedulerApi.Helpers
 {
+    public static class Helper
+    {
+        public static List<T> DataTableToList<T>(this DataTable table) where T : class, new()
+        {
+            try
+            {
+                List<T> list = new List<T>();
+
+                foreach (var row in table.AsEnumerable())
+                {
+                    T obj = new T();
+
+                    foreach (var prop in obj.GetType().GetProperties())
+                    {
+                        try
+                        {
+                            PropertyInfo propertyInfo = obj.GetType().GetProperty(prop.Name);
+                            propertyInfo.SetValue(obj, Convert.ChangeType(row[prop.Name], propertyInfo.PropertyType), null);
+                        }
+                        catch
+                        {
+                            continue;
+                        }
+                    }
+
+                    list.Add(obj);
+                }
+
+                return list;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+    }
+
     public class SRBinderHelper
     {
+
         public static IEnumerable<SRViewModel> RetrunListOfOrders()
         {
             string xmlData = HttpContext.Current.Server.MapPath("~/App_Data/SRData.xml");
@@ -23,32 +60,38 @@ namespace KendoSchedulerApi.Helpers
             //ContactName = rows[2].ToString(),
             //SRDate = DateTime.Parse(rows[3].ToString()),
             //ShippedDate = DateTime.Parse(rows[4].ToString())
-            result = (from rows in ds.Tables[0].AsEnumerable()
-                      select new SRViewModel
-                      {
-                          TaskID = Convert.ToInt32(rows[0].ToString()),
-                          Title = rows[1].ToString(),
-                          Description = rows[2].ToString(),
-                          Start = DateTime.Parse(rows[3].ToString()),
-                          StartTimezone = rows[4].ToString()=="" ? null : rows[4].ToString(),
-                          End = DateTime.Parse(rows[5].ToString()),
-                          EndTimezone = rows[6].ToString() == "" ? null : rows[6].ToString(),
+            //result = (from rows in ds.Tables[0].AsEnumerable()
+            //          select new SRViewModel
+            //          {
+            //              TaskID = Convert.ToInt32(rows[0].ToString()),
+            //              Title = rows[1].ToString(),
+            //              Description = rows[2].ToString(),
+            //              Start = DateTime.Parse(rows[3].ToString()),
+            //              StartTimezone = rows[4].ToString()=="" ? null : rows[4].ToString(),
+            //              End = DateTime.Parse(rows[5].ToString()),
+            //              EndTimezone = rows[6].ToString() == "" ? null : rows[6].ToString(),
 
-                          RecurrenceRule = rows[7].ToString() == "" ? null : rows[7].ToString(),
-                          RecurrenceID = rows[8].ToString(),
-                          RecurrenceException = rows[9].ToString() == "" ? null : rows[9].ToString(),
+            //              RecurrenceRule = rows[7].ToString() == "" ? null : rows[7].ToString(),
+            //              RecurrenceID = rows[8].ToString(),
+            //              RecurrenceException = rows[9].ToString() == "" ? null : rows[9].ToString(),
 
 
-                          IsAllDay = Convert.ToBoolean(rows[10]),
-                          OwnerID = Convert.ToInt32(rows[11].ToString()),
+            //              IsAllDay = Convert.ToBoolean(rows[10]),
+            //              OwnerID = Convert.ToInt32(rows[11].ToString()),
 
-                      }).ToList();
+            //          }).ToList();
+
+            //var JSONString = JsonConvert.SerializeObject(ds.Tables[0]);
+            DataTable dtt = ds.Tables[0];
+            result = dtt.DataTableToList<SRViewModel>();
+
             return result;
         }
 
         public static void AddOrder(SRViewModel order)
         {
             var list = RetrunListOfOrders().ToList();
+            order.TaskID = list.Count() + 1;
             list.Add(order);
 
             WriteListOfOrders(list);

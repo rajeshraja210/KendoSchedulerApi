@@ -9,9 +9,8 @@
 
 namespace KendoSchedulerApi.Models
 {
-    using System;
     using System.Collections.Generic;
-    
+
     public partial class Task
     {
         public Task()

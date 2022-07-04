@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 using System.Xml.Serialization;
 
 namespace KendoSchedulerApi.Models
@@ -72,7 +71,7 @@ namespace KendoSchedulerApi.Models
         public string RecurrenceID { get; set; }
         public string RecurrenceException { get; set; }
         public bool IsAllDay { get; set; }
-        public int? OwnerID { get; set; }
+        public int OwnerID { get; set; }
 
     }
 }
